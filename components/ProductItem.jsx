@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const ProductItem = ({ product }) => {
   return (
-    <div className="card">
+    <div className="mb-5 block rounded-lg border border-gray-200 shadow-md">
       <Link href={`/product/${product.slug}`}>
         <a>
           <img
@@ -22,7 +22,7 @@ const ProductItem = ({ product }) => {
         </Link>
         <p className="mb-2">{product.brand}</p>
         <p>${product.price}</p>
-        <button type='button' className='primary-button'>
+        <button type='button' className='rounded bg-amber-300 py-2 px-4 shadow outline-none duration-300 hover:bg-amber-400 active:bg-amber-700'>
             Add to cart
         </button>
       </div>
