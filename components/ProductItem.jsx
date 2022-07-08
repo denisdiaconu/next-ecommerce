@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import { Link } from 'next/link';
+import Link from 'next/link';
 
 const ProductItem = ({ product }) => {
   return (
@@ -14,8 +14,17 @@ const ProductItem = ({ product }) => {
           />
         </a>
       </Link>
-      <div className='flex items-center justify-center flex-col'>
-
+      <div className="flex p-5 items-center justify-center flex-col">
+        <Link href={`/product/${product.slug}`}>
+          <a>
+            <h2 className="text-lg">{product.name}</h2>
+          </a>
+        </Link>
+        <p className="mb-2">{product.brand}</p>
+        <p>${product.price}</p>
+        <button type='button' className='primary-button'>
+            Add to cart
+        </button>
       </div>
     </div>
   );
