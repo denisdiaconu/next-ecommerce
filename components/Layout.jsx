@@ -1,6 +1,6 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import React from 'react';
+import NavBar from './NavBar';
 
 export default function Layout({title, children }) {
   return (
@@ -13,15 +13,7 @@ export default function Layout({title, children }) {
         </Head>
         <div className='flex justify-between min-h-screen flex-col'>
           <header>
-            <nav className='flex shadow-md items-center px-4 justify-between h-12'>
-              <Link href="/">
-                <a className='font-bold text-lg'>Lapage</a>
-              </Link>
-              <div>
-                <Link href="/cart">Cart</Link>
-                <Link href="/login">Login</Link>
-              </div>
-            </nav>
+            <NavBar />
           </header>
           <main>{children}</main>
           <footer>footer</footer>
