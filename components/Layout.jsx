@@ -1,7 +1,7 @@
 import Head from 'next/head';
-import React from 'react';
 import Footer from './Footer';
 import NavBar from './NavBar';
+import React from 'react';
 
 export default function Layout({ title, children }) {
   return (
@@ -17,7 +17,7 @@ export default function Layout({ title, children }) {
             <NavBar />
           </header>
           <main className="container mt-4 px-4 m-auto">{children}</main>
-          <footer className='flex items-center justify-center h-10 shadow-inner'>
+          <footer className="flex items-center justify-center h-10 shadow-inner">
             <Footer />
           </footer>
         </div>

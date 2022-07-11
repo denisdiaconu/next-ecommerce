@@ -22,8 +22,11 @@ const ProductItem = ({ product }) => {
         </Link>
         <p className="mb-2">{product.brand}</p>
         <p>${product.price}</p>
-        <button type='button' className='rounded bg-amber-300 py-2 px-4 shadow outline-none duration-300 hover:bg-amber-400 active:bg-amber-700'>
-            Add to cart
+        <button
+          type="button"
+          className="rounded bg-amber-300 py-2 px-4 shadow outline-none duration-300 hover:bg-amber-400 active:bg-amber-700"
+        >
+          Add to cart
         </button>
       </div>
     </div>
