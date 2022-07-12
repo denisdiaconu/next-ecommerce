@@ -1,15 +1,16 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import Layout from '../../components/Layout';
 import data from '../../utils/data';
 import { Store } from '../../utils/Store';
+import { useRouter } from 'next/router';
 
 export default function ProductScreen() {
   const { state, dispatch } = useContext(Store);
   const { query } = useRouter();
   const { slug } = query;
+  const router = useRouter();
   const product = data.products.find((x) => x.slug === slug);
   if (!product) {
     return <div>Product not found!</div>;
@@ -22,6 +23,7 @@ export default function ProductScreen() {
       return;
     }
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
+    router.push('/cart')
   };
   return (
     <Layout title={product.name}>

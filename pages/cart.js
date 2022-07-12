@@ -1,17 +1,29 @@
 import React, { useContext } from 'react';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
-import { Link } from 'next/link';
+import Link from 'next/link';
 import Image from 'next/image';
+import { XCircleIcon } from '@heroicons/react/outline';
+import { useRouter } from 'next/router';
 
-export default function cartScreen() {
+export default function CartScreen() {
   const { state, dispatch } = useContext(Store);
+  const router = useRouter();
   const {
     cart: { cartItems },
   } = state;
 
+  const updateCartHandler = (item, qty) => {
+    const quantity = Number(qty);
+    dispatch({type: 'CART_ADD_ITEM', payload: {...item, quantity}})
+  }
+
+  const removeItemHandler = (item) => {
+    dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+  };
+
   return (
-    <Layout title="Cart">
+    <Layout title="Shopping Cart">
       <h1 className="mb-4 text-xl">Shopping Cart</h1>
       {cartItems.length === 0 ? (
         <div>
@@ -41,26 +53,46 @@ export default function cartScreen() {
                             height={50}
                             width={50}
                           ></Image>
-                          &nbsp
-                          {cartItems.name}
+                          &nbsp;
+                          {item.name}
                         </a>
                       </Link>
                     </td>
-                    <td className='text-right p-5'>
-                        {item.quantity}
+                    <td className="text-right p-5">
+                      <select value={item.quantity} onChange={(e) => updateCartHandler(item, e.target.value)}>
+                      {
+                        [...Array(item.countInStock).keys()].map(x => (
+                          <option key={x+1} value={x+1}>{x+1}</option>
+                        ))
+                      }
+                      </select>
                     </td>
-                    <td className='text-right p-5'>
-                        ${item.price}
-                    </td>
-                    <td className='text-center p-5'>
-                        <button>
-                            <XCircleIcon className='w-5 b-5'></XCircleIcon>
-                        </button>
+                    <td className="text-right p-5">${item.price}</td>
+                    <td className="text-center p-5">
+                      <button onClick={() => removeItemHandler(item)}>
+                        <XCircleIcon className="w-5 b-5"></XCircleIcon>
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+          <div className="mb-5 block rounded-lg border border-gray-200 shadow-md p-5">
+            <ul>
+              <li>
+                <div className="pb-3">
+                  Subtotal ( {cartItems.reduce((a, c) => a + c.quantity, 0)})
+                  {'  '}: $
+                  {cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
+                </div>
+              </li>
+              <li>
+                <button onClick={() => router.push('/shipping')} className='w-full rounded bg-amber-300 py-2 px-4 shadow outline-none hover:bg-amber-400 active:bg-amber-500'>
+                  Check Out
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       )}
