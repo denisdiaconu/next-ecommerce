@@ -5,8 +5,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { XCircleIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 
-export default function CartScreen() {
+function CartScreen() {
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
   const {
@@ -15,8 +16,8 @@ export default function CartScreen() {
 
   const updateCartHandler = (item, qty) => {
     const quantity = Number(qty);
-    dispatch({type: 'CART_ADD_ITEM', payload: {...item, quantity}})
-  }
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
+  };
 
   const removeItemHandler = (item) => {
     dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
@@ -59,12 +60,17 @@ export default function CartScreen() {
                       </Link>
                     </td>
                     <td className="text-right p-5">
-                      <select value={item.quantity} onChange={(e) => updateCartHandler(item, e.target.value)}>
-                      {
-                        [...Array(item.countInStock).keys()].map(x => (
-                          <option key={x+1} value={x+1}>{x+1}</option>
-                        ))
-                      }
+                      <select
+                        value={item.quantity}
+                        onChange={(e) =>
+                          updateCartHandler(item, e.target.value)
+                        }
+                      >
+                        {[...Array(item.countInStock).keys()].map((x) => (
+                          <option key={x + 1} value={x + 1}>
+                            {x + 1}
+                          </option>
+                        ))}
                       </select>
                     </td>
                     <td className="text-right p-5">${item.price}</td>
@@ -88,7 +94,10 @@ export default function CartScreen() {
                 </div>
               </li>
               <li>
-                <button onClick={() => router.push('/shipping')} className='w-full rounded bg-amber-300 py-2 px-4 shadow outline-none hover:bg-amber-400 active:bg-amber-500'>
+                <button
+                  onClick={() => router.push('/shipping')}
+                  className="w-full rounded bg-amber-300 py-2 px-4 shadow outline-none hover:bg-amber-400 active:bg-amber-500"
+                >
                   Check Out
                 </button>
               </li>
@@ -99,3 +108,5 @@ export default function CartScreen() {
     </Layout>
   );
 }
+
+export default dynamic(() => Promise.resolve(CartScreen), { ssr: false });
