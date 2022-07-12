@@ -46,6 +46,17 @@ export default function cartScreen() {
                         </a>
                       </Link>
                     </td>
+                    <td className='text-right p-5'>
+                        {item.quantity}
+                    </td>
+                    <td className='text-right p-5'>
+                        ${item.price}
+                    </td>
+                    <td className='text-center p-5'>
+                        <button>
+                            <XCircleIcon className='w-5 b-5'></XCircleIcon>
+                        </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
