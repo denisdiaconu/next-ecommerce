@@ -18,3 +18,9 @@ a {
 * {
   box-sizing: border-box;
 }
+
+input,
+select,
+textarea {
+  @apply rounded border p-2 ring-indigo-300 focus:ring outline-none;
+}
