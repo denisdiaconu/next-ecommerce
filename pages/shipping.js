@@ -1,19 +1,46 @@
-import React from 'react';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
+import React, { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import CheckoutWizard from '../components/CheckoutWizard';
 import Layout from '../components/Layout';
+import { Store } from '../utils/Store';
 
-export default function shipping() {
+export default function ShippingScreen() {
+    const {state, dispatch} = useContext(Store);
+    const { cart } = state;
+    const { shippingAddress } = cart;
+    const router = useRouter();
   const {
     handleSubmit,
     register,
     formState: { errors },
     setValue,
-    getValues,
   } = useForm();
 
-  const submitHandler = () => {
+  useEffect(() => {
+    setValue('fullName', shippingAddress.fullName);
+    setValue('address', shippingAddress.address);
+    setValue('city', shippingAddress.city);
+    setValue('postalCode', shippingAddress.postalCode);
+    setValue('country', shippingAddress.country);
+  }, [setValue, shippingAddress])
 
+  const submitHandler = ({ fullName, address, city, postalCode, country}) => {
+    dispatch({
+        type: 'SAVE_SHIPPING_ADDRESS',
+        payload: {fullName, address, city, postalCode, country, location}
+    })
+    Cookies.set(
+        'cart',
+        JSON.stringify({
+            ...cart,
+            shippingAddress: {
+                fullName, address, city, postalCode, country,
+            }
+        })
+    )
+    router.push('/payment')
   }
   return (
     <Layout title="Shipping Address">
@@ -76,3 +103,5 @@ export default function shipping() {
     </Layout>
   );
 }
+
+ShippingScreen.auth = true;
