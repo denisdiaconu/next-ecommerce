@@ -3,8 +3,9 @@ import Link from 'next/link';
 import 'react-toastify/dist/ReactToastify.css';
 import { Menu } from '@headlessui/react';
 import { Store } from '../utils/Store';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import DropdownLink from './DropdownLink';
+import Cookies from 'js-cookie';
 
 const NavBar = () => {
   const { status, data: session } = useSession();
@@ -15,6 +16,12 @@ const NavBar = () => {
   useEffect(() => {
     setcartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
   }, [cart.cartItems]);
+
+  const logoutClickHandler = () => {
+    Cookies.remove('cart');
+    dispatch({ type: 'CART_RESET' });
+    signOut({ callbackUrl: '/login' });
+  };
   return (
     <nav className="flex shadow-md items-center px-4 justify-between h-12">
       <Link href="/">
@@ -38,11 +45,25 @@ const NavBar = () => {
             <Menu.Button className="text-blue-600">
               {session.user.name}
             </Menu.Button>
-            <Menu.Items className="absolute right-0 origin-top-right w-56 shadow-lg">
+            <Menu.Items className="absolute bg-white right-0 origin-top-right w-56 shadow-lg">
               <Menu.Item>
                 <DropdownLink className="dropdown-link" href="/profile">
                   Profile
                 </DropdownLink>
+              </Menu.Item>
+              <Menu.Item>
+                <DropdownLink className="dropdown-link" href="/order-history">
+                  Order History
+                </DropdownLink>
+              </Menu.Item>
+              <Menu.Item>
+                <a
+                  onClick={logoutClickHandler}
+                  className="dropdown-link"
+                  href="#"
+                >
+                  Logout
+                </a>
               </Menu.Item>
             </Menu.Items>
           </Menu>
