@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import 'react-toastify/dist/ReactToastify.css';
+import { Menu } from '@headlessui/react';
 import { Store } from '../utils/Store';
 import { useSession } from 'next-auth/react';
+import DropdownLink from './DropdownLink';
 
 const NavBar = () => {
   const { status, data: session } = useSession();
@@ -32,7 +34,18 @@ const NavBar = () => {
         {status === 'loading' ? (
           'Loading'
         ) : session?.user ? (
-          session.user.name
+          <Menu as="div" className="relative inline-block">
+            <Menu.Button className="text-blue-600">
+              {session.user.name}
+            </Menu.Button>
+            <Menu.Items className="absolute right-0 origin-top-right w-56 shadow-lg">
+              <Menu.Item>
+                <DropdownLink className="dropdown-link" href="/profile">
+                  Profile
+                </DropdownLink>
+              </Menu.Item>
+            </Menu.Items>
+          </Menu>
         ) : (
           <Link href="/login">
             <a className="p-2">Login</a>
