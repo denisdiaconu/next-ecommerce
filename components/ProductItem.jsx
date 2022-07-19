@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-const ProductItem = ({ product }) => {
+const ProductItem = ({ product, addToCartHandler }) => {
   return (
     <div className="mb-5 block rounded-lg border border-gray-200 shadow-md">
       <Link href={`/product/${product.slug}`}>
@@ -24,6 +24,7 @@ const ProductItem = ({ product }) => {
         <p>${product.price}</p>
         <button
           type="button"
+          onClick={() => addToCartHandler(product)}
           className="rounded bg-amber-300 py-2 px-4 shadow outline-none duration-300 hover:bg-amber-400 active:bg-amber-700"
         >
           Add to cart

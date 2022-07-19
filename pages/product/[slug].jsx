@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import db from '../../utils/db';
 import Product from '../../models/Product';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function ProductScreen(props) {
   const { product } = props;
@@ -19,9 +20,8 @@ export default function ProductScreen(props) {
     const existItem = state.cart.cartItems.find((s) => s.slug === product.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`)
-    if (product.countInStock < quantity) {
-      alert('Product is out of stock');
-      return;
+    if (data.countInStock < quantity) {
+      return toast.error('Product is out of stock', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 1000});
     }
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
     router.push('/cart');
