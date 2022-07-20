@@ -52,6 +52,7 @@ export default function PlaceOrderScreen() {
           cartItems: [],
         })
       );
+      router.push(`/order/${data._id}`);
     } catch (err) {
       setLoading(false);
       toast.error(getError(err));
@@ -128,43 +129,45 @@ export default function PlaceOrderScreen() {
               </div>
             </div>
           </div>
-          <div className="p-5 mb-5 block rounded-lg border border-gray-200 shadow-md">
-            <h2 className="mb-2 text-lg">Order Summary</h2>
-            <ul>
-              <li>
-                <div className="flex justify-between mb-2">
-                  <div>Items</div>
-                  <div>${itemsPrice}</div>
-                </div>
-              </li>
-              <li>
-                <div className="flex justify-between mb-2">
-                  <div>Tax</div>
-                  <div>${taxPrice}</div>
-                </div>
-              </li>
-              <li>
-                <div className="flex justify-between mb-2">
-                  <div>Shipping</div>
-                  <div>${shippingPrice}</div>
-                </div>
-              </li>
-              <li>
-                <div className="flex justify-between mb-2">
-                  <div>Total</div>
-                  <div>${totalPrice}</div>
-                </div>
-              </li>
-              <li>
-                <button
-                  onClick={placeOrderHandler}
-                  className="w-full rounded bg-amber-300 py-2 px-4 shadow outline-none hover:bg-amber-400 active:bg-amber-500"
-                  disabled={loading}
-                >
-                  {loading ? 'Loading...' : 'Place Order'}
-                </button>
-              </li>
-            </ul>
+          <div>
+            <div className="p-5 mb-5 block rounded-lg border border-gray-200 shadow-md">
+              <h2 className="mb-2 text-lg">Order Summary</h2>
+              <ul>
+                <li>
+                  <div className="flex justify-between mb-2">
+                    <div>Items</div>
+                    <div>${itemsPrice}</div>
+                  </div>
+                </li>
+                <li>
+                  <div className="flex justify-between mb-2">
+                    <div>Tax</div>
+                    <div>${taxPrice}</div>
+                  </div>
+                </li>
+                <li>
+                  <div className="flex justify-between mb-2">
+                    <div>Shipping</div>
+                    <div>${shippingPrice}</div>
+                  </div>
+                </li>
+                <li>
+                  <div className="flex justify-between mb-2">
+                    <div>Total</div>
+                    <div>${totalPrice}</div>
+                  </div>
+                </li>
+                <li>
+                  <button
+                    onClick={placeOrderHandler}
+                    className="w-full rounded bg-amber-300 py-2 px-4 shadow outline-none hover:bg-amber-400 active:bg-amber-500"
+                    disabled={loading}
+                  >
+                    {loading ? 'Loading...' : 'Place Order'}
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       )}
