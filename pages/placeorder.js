@@ -1,14 +1,62 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import CheckoutWizard from '../components/CheckoutWizard';
 import Link from 'next/link';
 import { Store } from '../utils/Store';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
+import { getError } from '../utils/error';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default function PlaceOrderScreen() {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
   const { cartItems, shippingAddress, paymentMethod } = cart;
+  const router = useRouter();
+  const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
+
+  const itemsPrice = round2(
+    cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
+  );
+  const shippingPrice = itemsPrice > 200 ? 0 : 15;
+  const taxPrice = round2(itemsPrice * 0.15);
+  const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
+
+  useEffect(() => {
+    if (!paymentMethod) {
+      router.push('/payment');
+    }
+  }, [paymentMethod, router]);
+  const [loading, setLoading] = useState(false);
+
+  const placeOrderHandler = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post('/api/orders', {
+        orderItems: cartItems,
+        shippingAddress,
+        paymentMethod,
+        itemsPrice,
+        shippingPrice,
+        taxPrice,
+        totalPrice,
+      });
+      setLoading(false);
+      dispatch({ type: 'CART_CLEAR_ITEMS' });
+      Cookies.set(
+        'cart',
+        JSON.stringify({
+          ...cart,
+          cartItems: [],
+        })
+      );
+    } catch (err) {
+      setLoading(false);
+      toast.error(getError(err));
+    }
+  };
   return (
     <Layout title="Place Order">
       <CheckoutWizard activeStep={3} />
@@ -61,7 +109,7 @@ export default function PlaceOrderScreen() {
                               width={50}
                               height={50}
                             ></Image>
-                            &nbsp
+                            &nbsp;
                             {item.name}
                           </a>
                         </Link>
@@ -76,12 +124,52 @@ export default function PlaceOrderScreen() {
                 </tbody>
               </table>
               <div>
-                <Link href='/cart'>Edit</Link>
+                <Link href="/cart">Edit</Link>
               </div>
             </div>
+          </div>
+          <div className="p-5 mb-5 block rounded-lg border border-gray-200 shadow-md">
+            <h2 className="mb-2 text-lg">Order Summary</h2>
+            <ul>
+              <li>
+                <div className="flex justify-between mb-2">
+                  <div>Items</div>
+                  <div>${itemsPrice}</div>
+                </div>
+              </li>
+              <li>
+                <div className="flex justify-between mb-2">
+                  <div>Tax</div>
+                  <div>${taxPrice}</div>
+                </div>
+              </li>
+              <li>
+                <div className="flex justify-between mb-2">
+                  <div>Shipping</div>
+                  <div>${shippingPrice}</div>
+                </div>
+              </li>
+              <li>
+                <div className="flex justify-between mb-2">
+                  <div>Total</div>
+                  <div>${totalPrice}</div>
+                </div>
+              </li>
+              <li>
+                <button
+                  onClick={placeOrderHandler}
+                  className="w-full rounded bg-amber-300 py-2 px-4 shadow outline-none hover:bg-amber-400 active:bg-amber-500"
+                  disabled={loading}
+                >
+                  {loading ? 'Loading...' : 'Place Order'}
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       )}
     </Layout>
   );
 }
+
+PlaceOrderScreen.auth = true;
