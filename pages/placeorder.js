@@ -40,7 +40,27 @@ export default function PlaceOrderScreen() {
             <div className="p-5 mb-5  block rounded-lg border border-gray-200 shadow-md">
                 <h2 className="mb-2 text-lg">Order Items</h2>
                 <table className='min-w-full'>
-
+                    <thead className='border-b'>
+                        <tr>
+                            <th className='px-5 text-left'>Item</th>
+                            <th className='p-5 text-right'>Quantity</th>
+                            <th className='p-5 text-right'>Price</th>
+                            <th className='p-5 text-right'>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {cartItems.map((item) => (
+                            <tr key={item._id} className='border-b'>
+                                <td>
+                                    <Link href={`/product/${item.slug}`}>
+                                        <a className='flex items-center'>
+                                            <Image
+                                        </a>
+                                    </Link>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
                 </table>
             </div>
           </div>
