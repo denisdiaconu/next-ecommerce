@@ -66,10 +66,18 @@ export default function PlaceOrderScreen() {
                           </a>
                         </Link>
                       </td>
+                      <td className="p-5 text-right"></td>
+                      <td className="p-5 text-right"></td>
+                      <td className="p-5 text-right">
+                        ${item.quantity * item.price}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+              <div>
+                <Link href='/cart'>Edit</Link>
+              </div>
             </div>
           </div>
         </div>
