@@ -72,8 +72,8 @@ export default function PlaceOrderScreen() {
             <div className="p-5 mb-5  block rounded-lg border border-gray-200 shadow-md">
               <h2 className="mb-2 text-lg">Shipping Address</h2>
               <div>
-                {shippingAddress.fullName}, {shippingAddress.address}, ,
-                {shippingAddress.city}, {shippingAddress.postalCode}, ,
+                {shippingAddress.fullName}, {shippingAddress.address},
+                {shippingAddress.city}, {shippingAddress.postalCode},
                 {shippingAddress.country}
               </div>
               <div>

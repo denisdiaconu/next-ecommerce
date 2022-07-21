@@ -38,10 +38,11 @@ function OrderScreen() {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
-    if (!orderId._id || (order._id && order._id !== orderId)) {
+    if (!order._id || (order._id && order._id !== orderId)) {
       fetchOrder();
     }
   }, [order, orderId]);
+  
 
   const {
     shippingAddress,
@@ -69,8 +70,8 @@ function OrderScreen() {
             <div className="mb-5 block rounded-lg border border-gray-200 shadow-md p-5">
               <h2 className="mb-2 text-lg">Shipping Address</h2>
               <div>
-                {shippingAddress.fullName}, {shippingAddress.address}, ,
-                {shippingAddress.city}, {shippingAddress.postalCode}, ,
+                {shippingAddress.fullName}, {shippingAddress.address},
+                {shippingAddress.city}, {shippingAddress.postalCode},
                 {shippingAddress.country}
               </div>
               {isDelivered ? (
