@@ -5,7 +5,7 @@ import axios from 'axios';
 import { getError } from '../../utils/error';
 import Link from 'next/link';
 import Image from 'next/image';
-import { PayPalButtons } from '@paypal/react-paypal-js';
+import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -15,20 +15,32 @@ function reducer(state, action) {
       return { ...state, loading: false, order: action.payload, error: '' };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
+    case 'PAY_REQUEST':
+      return { ...state, loadingPay: true };
+    case 'PAY_SUCCESS':
+      return { ...state, loadingPay: false, successPay: true };
+    case 'PAY_FAIL':
+      return { ...state, loadingPay: false, errorPay: action.payload };
+    case 'PAY_RESET':
+      return { ...state, loadingPay: false, successPay: false, errorPay: '' };
     default:
       state;
   }
 }
 
 function OrderScreen() {
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const { query } = useRouter();
   const orderId = query.id;
 
-  const [{ loading, error, order }, dispatch] = useReducer(reducer, {
-    loading: true,
-    order: {},
-    error: '',
-  });
+  const [{ loading, error, order, successPay, loadingPay }, dispatch] = useReducer(
+    reducer,
+    {
+      loading: true,
+      order: {},
+      error: '',
+    }
+  );
   useEffect(() => {
     const fetchOrder = async () => {
       try {
@@ -39,10 +51,29 @@ function OrderScreen() {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
-    if (!order._id || (order._id && order._id !== orderId)) {
+    if (!order._id || successPay || (order._id && order._id !== orderId)) {
       fetchOrder();
+      if (successPay) {
+        dispatch({ type: 'PAY_RESET' });
+      }
+    } else {
+      const loadPaypalScript = async () => {
+        const { data: clientId } = await axios.get('/api/keys/paypal');
+        paypalDispatch({
+          type: 'resetOptions',
+          value: {
+            'client-id': clientId,
+            currency: 'EUR',
+          },
+        });
+        paypalDispatch({
+          type: 'setLoadingStatus',
+          value: 'pending',
+        });
+      };
+      loadPaypalScript();
     }
-  }, [order, orderId]);
+  }, [order, orderId, paypalDispatch]);
 
   const {
     shippingAddress,
