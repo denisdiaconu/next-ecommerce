@@ -57,7 +57,7 @@ export default function PaymentScreen() {
         ))}
         <div className="flex justify-between mb-4">
           <button
-            onClick={() => router.psuh('shipping')}
+            onClick={() => router.push('shipping')}
             type="button"
             className="rounded bg-gray-100 py-2  px-4 text-black shadow outline-none hover:bg-gray-200  active:bg-gray-300"
           >
