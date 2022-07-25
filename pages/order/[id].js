@@ -35,7 +35,7 @@ function OrderScreen() {
   const orderId = query.id;
 
   const [
-    { loading, error, order, successPay, loadingPay, errorPay },
+    { loading, error, order, successPay, loadingPay },
     dispatch,
   ] = useReducer(reducer, {
     loading: true,
