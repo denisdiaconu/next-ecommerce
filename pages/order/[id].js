@@ -5,6 +5,7 @@ import axios from 'axios';
 import { getError } from '../../utils/error';
 import Link from 'next/link';
 import Image from 'next/image';
+import { PayPalButtons } from '@paypal/react-paypal-js';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -42,7 +43,6 @@ function OrderScreen() {
       fetchOrder();
     }
   }, [order, orderId]);
-  
 
   const {
     shippingAddress,
@@ -125,12 +125,8 @@ function OrderScreen() {
                           </a>
                         </Link>
                       </td>
-                      <td className='p-5 text-right'>
-                        {item.quantity}
-                      </td>
-                      <td className='p-5 text-right'>
-                        {item.price}
-                      </td>
+                      <td className="p-5 text-right">{item.quantity}</td>
+                      <td className="p-5 text-right">{item.price}</td>
                       <td className="p-5 text-right">
                         ${item.quantity * item.price}
                       </td>
@@ -141,34 +137,49 @@ function OrderScreen() {
             </div>
           </div>
           <div>
-            <div className=' mb-5 block rounded-lg border border-gray-200 shadow-md p-5'>
-                <h2 className='text-lg mb-2'>Order Summary</h2>
-                <ul>
-                    <li>
-                        <div className='flex justify-between mb-2'>
-                            <div>Items</div>
-                            <div>${itemsPrice}</div>
-                        </div>
-                    </li>
-                    <li>
-                        <div className='flex justify-between mb-2'>
-                            <div>Tax</div>
-                            <div>${taxPrice}</div>
-                        </div>
-                    </li>
-                    <li>
-                        <div className='flex justify-between mb-2'>
-                            <div>Shipping</div>
-                            <div>${shippingPrice}</div>
-                        </div>
-                    </li>
-                    <li>
-                        <div className='flex justify-between mb-2'>
-                            <div>Total</div>
-                            <div>${totalPrice}</div>
-                        </div>
-                    </li>
-                </ul>
+            <div className=" mb-5 block rounded-lg border border-gray-200 shadow-md p-5">
+              <h2 className="text-lg mb-2">Order Summary</h2>
+              <ul>
+                <li>
+                  <div className="flex justify-between mb-2">
+                    <div>Items</div>
+                    <div>${itemsPrice}</div>
+                  </div>
+                </li>
+                <li>
+                  <div className="flex justify-between mb-2">
+                    <div>Tax</div>
+                    <div>${taxPrice}</div>
+                  </div>
+                </li>
+                <li>
+                  <div className="flex justify-between mb-2">
+                    <div>Shipping</div>
+                    <div>${shippingPrice}</div>
+                  </div>
+                </li>
+                <li>
+                  <div className="flex justify-between mb-2">
+                    <div>Total</div>
+                    <div>${totalPrice}</div>
+                  </div>
+                </li>
+                {!isPaid && (
+                  <li>
+                    {isPending ? (
+                      <div>Loading...</div>
+                    ) : (
+                      <div className="w-full">
+                        <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                        ></PayPalButtons>
+                      </div>
+                    )}
+                  </li>
+                )}
+              </ul>
             </div>
           </div>
         </div>
