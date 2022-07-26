@@ -3,6 +3,7 @@ import React, { useEffect, useReducer } from 'react';
 import { getError } from '../utils/error';
 import Layout from '../components/Layout';
 import Link from 'next/link';
+import OrderHistoryScreen from './order-history';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -87,3 +88,5 @@ export default function OrderHistoryScreen() {
     </Layout>
   );
 }
+
+OrderHistoryScreen.auth = true
