@@ -5,16 +5,16 @@ import Layout from '../components/Layout';
 import Link from 'next/link';
 
 function reducer(state, action) {
-    switch (action.type) {
-      case 'FETCH_REQUEST':
-        return { ...state, loading: true, error: '' };
-      case 'FETCH_SUCCESS':
-        return { ...state, loading: false, orders: action.payload, error: '' };
-      case 'FETCH_FAIL':
-        return { ...state, loading: false, error: action.payload };
-      default:
-        return state;
-    }
+  switch (action.type) {
+    case 'FETCH_REQUEST':
+      return { ...state, loading: true, error: '' };
+    case 'FETCH_SUCCESS':
+      return { ...state, loading: false, orders: action.payload, error: '' };
+    case 'FETCH_FAIL':
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
 }
 
 export default function OrderHistoryScreen() {
@@ -37,15 +37,16 @@ export default function OrderHistoryScreen() {
 
     fetchOrders();
   }, []);
-  return <Layout title="Order History">
-    <h1>Order History</h1>
-    {loading ? (
+  return (
+    <Layout title="Order History">
+      <h1>Order History</h1>
+      {loading ? (
         <div>Loading...</div>
-    ) : error ? (
+      ) : error ? (
         <div className="alert-error">{error}</div>
-    ) : (
+      ) : (
         <div className="overflow-x-auto">
-            <table className='min-w-full'>
+          <table className="min-w-full">
             <thead className="border-b">
               <tr>
                 <th className="px-5 text-left">ID</th>
@@ -57,33 +58,32 @@ export default function OrderHistoryScreen() {
               </tr>
             </thead>
             <tbody>
-                {orders.map((order) => (
-                    <tr className='border-b' key={order._id}>
-                        <td className="p-5">{order._id.substring(20,24)}</td>
-                        <td className=" p-5 ">{order.createdAt.substring(0, 10)}</td>
-                  <td className=" p-5 ">${order.totalPrice}</td>
-                  <td className=" p-5 ">
+              {orders.map((order) => (
+                <tr className="border-b" key={order._id}>
+                  <td className="p-5">{order._id.substring(20, 24)}</td>
+                  <td className="p-5">{order.createdAt.substring(0, 10)}</td>
+                  <td className="p-5">${order.totalPrice}</td>
+                  <td className="p-5">
                     {order.isPaid
                       ? `${order.paidAt.substring(0, 10)}`
                       : 'not paid'}
                   </td>
-                  <td className=" p-5 ">
+                  <td className="p-5">
                     {order.isDelivered
                       ? `${order.deliveredAt.substring(0, 10)}`
                       : 'not delivered'}
                   </td>
-                  <td className=" p-5 ">
+                  <td className="p-5">
                     <Link href={`/order/${order._id}`} passHref>
                       <a>Details</a>
                     </Link>
                   </td>
-                    </tr>
-                ))}
+                </tr>
+              ))}
             </tbody>
-            </table>
+          </table>
         </div>
-    )
-    }
-
-  </Layout>
+      )}
+    </Layout>
+  );
 }
