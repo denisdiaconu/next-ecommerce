@@ -11,8 +11,6 @@ LAPAGE is a ECommerce Website like Amazon by Next.js.
 - MongoDB
 - PayPal developer api
 
-## 🔴 Live <a name = "here"></a>
-**Click [here](https://next-ecommerce-seven-xi.vercel.app/) in order to see the page of this project.**
 
 
 ![Page](https://github.com/denisdiaconu/next-ecommerce/blob/master/public/images/next-image.png)
