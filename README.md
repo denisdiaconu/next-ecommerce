@@ -13,9 +13,6 @@ LAPAGE is a ECommerce Website like Amazon by Next.js.
 
 
 
-![Page](https://github.com/denisdiaconu/next-ecommerce/blob/master/public/images/next-image.png)
-
-
 ## Getting Started
 
 To get a local copy up and running follow these simple example steps on the command line.
