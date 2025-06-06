@@ -1,6 +1,6 @@
 # Next Ecommerce
 
-LAPAGE is a ECommerce Website like Amazon by Next.js.
+Next Ecommerce is an ECommerce Website like Amazon by Next.js.
 
 ## Built With
 
